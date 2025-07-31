@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Srinath & Shreya's Idea Wall 💡</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: #f7f9fb;
+      color: #333;
+      margin: 0;
+      padding: 1rem;
+    }
+    h1 {
+      text-align: center;
+      color: #c0392b;
+    }
+    .form {
+      max-width: 600px;
+      margin: 2rem auto;
+      background: white;
+      padding: 1rem;
+      border-radius: 12px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+    }
+    .form input, .form textarea {
+      width: 100%;
+      padding: 0.75rem;
+      margin-top: 0.5rem;
+      margin-bottom: 1rem;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      font-size: 1rem;
+    }
+    .form button {
+      background: #e74c3c;
+      color: white;
+      padding: 0.75rem 1.25rem;
+      border: none;
+      border-radius: 8px;
+      font-size: 1rem;
+      cursor: pointer;
+    }
+    .ideas {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1rem;
+      max-width: 1200px;
+      margin: 2rem auto;
+    }
+    .idea {
+      background: white;
+      padding: 1rem;
+      border-radius: 12px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.06);
+    }
+    .idea img {
+      max-width: 100%;
+      border-radius: 8px;
+      margin-bottom: 0.5rem;
+    }
+    .idea a {
+      color: #2980b9;
+      text-decoration: none;
+    }
+    .idea h3 {
+      margin: 0.5rem 0;
+      font-size: 1.2rem;
+    }
+    .idea p {
+      margin: 0.5rem 0;
+      font-size: 0.95rem;
+    }
+  </style>
+</head>
+<body>
+  <h1>💡 Srinath & Shreya's Idea Wall</h1>
+  <div class="form">
+    <label>Title</label>
+    <input id="title" placeholder="e.g., A couple’s spa experience" />
+
+    <label>Description</label>
+    <textarea id="desc" rows="3" placeholder="Why it's a great idea..."></textarea>
+
+    <label>Image URL (optional)</label>
+    <input id="img" placeholder="Paste an image URL (e.g., from Amazon)" />
+
+    <label>Buy Link (optional)</label>
+    <input id="link" placeholder="https://amazon.in/..." />
+
+    <button onclick="addIdea()">➕ Add Idea</button>
+  </div>
+
+  <div class="ideas" id="ideaList"></div>
+
+  <script>
+    let ideas = JSON.parse(localStorage.getItem('idea_wall') || '[]');
+
+    function renderIdeas() {
+      const container = document.getElementById('ideaList');
+      container.innerHTML = '';
+      ideas.forEach((idea) => {
+        const div = document.createElement('div');
+        div.className = 'idea';
+        if (idea.img) {
+          const img = document.createElement('img');
+          img.src = idea.img;
+          div.appendChild(img);
+        }
+        const title = document.createElement('h3');
+        title.textContent = idea.title;
+        div.appendChild(title);
+        const desc = document.createElement('p');
+        desc.textContent = idea.desc;
+        div.appendChild(desc);
+        if (idea.link) {
+          const a = document.createElement('a');
+          a.href = idea.link;
+          a.target = '_blank';
+          a.textContent = '🔗 View / Buy';
+          div.appendChild(a);
+        }
+        container.appendChild(div);
+      });
+    }
+
+    function addIdea() {
+      const title = document.getElementById('title').value.trim();
+      const desc = document.getElementById('desc').value.trim();
+      const img = document.getElementById('img').value.trim();
+      const link = document.getElementById('link').value.trim();
+      if (!title || !desc) {
+        alert("Please enter a title and description");
+        return;
+      }
+      ideas.push({ title, desc, img, link });
+      localStorage.setItem('idea_wall', JSON.stringify(ideas));
+      document.getElementById('title').value = '';
+      document.getElementById('desc').value = '';
+      document.getElementById('img').value = '';
+      document.getElementById('link').value = '';
+      renderIdeas();
+    }
+
+    renderIdeas();
+  </script>
+</body>
+</html>
+
